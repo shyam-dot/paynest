@@ -18,7 +18,7 @@ const cards = [
 
 export default function Home() {
   const nav = useNavigate()
-  const { setPayment, authError } = useApp()
+  const { setPayment } = useApp()
   const toContact = (name) => { setPayment({ upiId: '', payeeName: name, amount: '', note: '' }); nav('/pay') }
 
   return (
@@ -29,8 +29,6 @@ export default function Home() {
         </button>
         <button onClick={() => nav('/you')} className="w-11 h-11 rounded-full bg-card2 flex items-center justify-center press"><User size={22} /></button>
       </header>
-
-      {authError && <p className="mx-4 mt-3 text-xs text-red-400">Firebase sign-in failed: {authError}</p>}
 
       <section className="mx-4 mt-5 rounded-3xl p-5 bg-gradient-to-br from-[#1d4f3a] via-[#173a2c] to-card overflow-hidden relative">
         <div className="w-14 h-14 rounded-2xl bg-mint/20 text-mint flex items-center justify-center mb-3"><Bolt size={30} /></div>
