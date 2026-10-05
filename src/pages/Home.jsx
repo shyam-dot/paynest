@@ -1,97 +1,233 @@
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Search, User, Book, Bank, Swap, Wallet, Scan, Copy, Bolt, Chev } from '../components/Icons.jsx'
-import { initials } from '../lib/upi.js'
+import {
+  Search,
+  Scan,
+  PayAnyoneIcon,
+  BankTileIcon,
+  MobileRechargeIcon,
+  QrTileIcon,
+  RocketIcon,
+  TrophyIcon,
+  Chev,
+  GPayLandscape
+} from '../components/Icons.jsx'
 import { useApp } from '../lib/PaymentContext.jsx'
 
-const actions = [
-  { label: 'Pay mobile number', Icon: Book, to: '/pay' },
-  { label: 'Pay to UPI ID or bank', Icon: Bank, to: '/pay' },
-  { label: 'Self transfer', Icon: Swap, to: '/pay' },
-  { label: 'Check balance', Icon: Wallet, to: '/money' }
-]
-const contacts = ['Arun K', 'Meena R', 'Karthik S', 'Divya P', 'Rahul M']
-const cards = [
-  { t: 'Check score', s: 'See your credit score for free' },
-  { t: 'Mobile recharge', s: 'Plans from all operators' },
-  { t: 'Insurance', s: 'Cover starting at ₹1/day' }
+// Contacts exactly matching the user's Google Pay screenshot
+const CONTACTS = [
+  { name: 'Sharan', initial: 'S', color: '#1a73e8', upiId: 'sharan@okaxis' },
+  { name: 'Mr Kamalesh', initial: 'M', color: '#f2720c', upiId: 'mrkamalesh@okicici' },
+  { name: 'MURALIS SWEETS ...', initial: 'M', color: '#b3266e', upiId: 'muralissweets@okaxis' },
+  { name: 'Mr Sivabalan S', initial: 'M', color: '#0288d1', upiId: 'sivabalan@okhdfcbank' },
+  { name: 'R Sumathi', initial: 'R', color: '#6d4c41', upiId: 'rsumathi@okaxis' },
+  { name: 'Thilak', initial: 'T', color: '#7b1fa2', upiId: 'thilak@okicici' },
+  { name: 'Suresh', initial: 'S', color: '#2e7d32', upiId: 'suresh@oksbi' }
 ]
 
 export default function Home() {
   const nav = useNavigate()
   const { setPayment } = useApp()
-  const toContact = (name) => { setPayment({ upiId: '', payeeName: name, amount: '', note: '' }); nav('/pay') }
+  const [showAllContacts, setShowAllContacts] = useState(false)
+
+  const toContact = (c) => {
+    setPayment({
+      upiId: c.upiId,
+      payeeName: c.name,
+      amount: '',
+      note: ''
+    })
+    nav('/pay')
+  }
 
   return (
-    <div className="page pb-28">
-      <header className="safe-top px-4 flex items-center gap-3">
-        <button onClick={() => nav('/pay')} className="flex-1 flex items-center gap-3 bg-card rounded-full px-4 py-3 text-mute text-sm text-left press">
-          <Search size={18} /> Pay by name or phone number
+    <div className="page pb-28 min-h-full bg-[#111215] text-white relative">
+      {/* Night Landscape Graphic Header */}
+      <GPayLandscape />
+
+      {/* Top Search Bar & Profile */}
+      <header className="relative z-10 safe-top px-4 pt-3 flex items-center gap-3">
+        <button
+          onClick={() => nav('/pay')}
+          className="flex-1 flex items-center gap-3 bg-[#1e1f24] hover:bg-[#25272e] border border-[#2c2e36] rounded-full px-4 py-3 text-[#9aa0a6] text-sm text-left press transition-colors shadow-sm"
+        >
+          <Search size={19} className="text-white shrink-0" />
+          <span className="truncate text-sm text-[#9aa0a6]">Pay by name or phone nu...</span>
         </button>
-        <button onClick={() => nav('/you')} className="w-11 h-11 rounded-full bg-card2 flex items-center justify-center press"><User size={22} /></button>
+
+        {/* Profile Avatar "S" */}
+        <button
+          onClick={() => nav('/you')}
+          className="w-10 h-10 rounded-full bg-[#1e1f24] border border-[#2c2e36] flex items-center justify-center text-sm font-bold text-white shrink-0 press hover:border-[#8ab4f8] transition-colors"
+          aria-label="Profile"
+        >
+          S
+        </button>
       </header>
 
-      <section className="mx-4 mt-5 rounded-3xl p-5 bg-gradient-to-br from-[#1d4f3a] via-[#173a2c] to-card overflow-hidden relative">
-        <div className="w-14 h-14 rounded-2xl bg-mint/20 text-mint flex items-center justify-center mb-3"><Bolt size={30} /></div>
-        <p className="text-[11px] tracking-wide text-mint/80">Recharge and win</p>
-        <p className="text-2xl font-semibold mt-1">Flat 1,600 coins</p>
-        <p className="text-xs text-mute mt-1">Limited time offer</p>
-        <button className="mt-4 bg-white text-black text-sm font-medium rounded-xl px-4 py-2.5 press">Recharge now »</button>
-      </section>
+      {/* Primary 4 Google Blue Action Tiles */}
+      <section className="relative z-10 px-4 mt-20 grid grid-cols-4 gap-2.5">
+        {/* 1. Scan any QR code */}
+        <button
+          onClick={() => nav('/scan')}
+          className="flex flex-col items-center gap-2 press group"
+        >
+          <span className="w-14 h-14 rounded-2xl bg-[#0b57d0] group-hover:bg-[#1565c0] flex items-center justify-center text-white transition-colors shadow-md">
+            <QrTileIcon size={26} />
+          </span>
+          <span className="text-[11px] font-medium text-center leading-tight text-white/95 px-1">
+            Scan any QR code
+          </span>
+        </button>
 
-      <section className="px-4 mt-6 grid grid-cols-4 gap-2">
-        {actions.map(({ label, Icon, to }) => (
-          <button key={label} onClick={() => nav(to)} className="flex flex-col items-center gap-2 press">
-            <span className="w-16 h-16 rounded-full bg-card flex items-center justify-center text-mint"><Icon size={26} /></span>
-            <span className="text-[11px] text-center leading-tight text-white/90">{label}</span>
-          </button>
-        ))}
-      </section>
+        {/* 2. Pay anyone */}
+        <button
+          onClick={() => nav('/pay')}
+          className="flex flex-col items-center gap-2 press group"
+        >
+          <span className="w-14 h-14 rounded-2xl bg-[#0b57d0] group-hover:bg-[#1565c0] flex items-center justify-center text-white transition-colors shadow-md">
+            <PayAnyoneIcon size={26} />
+          </span>
+          <span className="text-[11px] font-medium text-center leading-tight text-white/95 px-1">
+            Pay anyone
+          </span>
+        </button>
 
-      <section className="px-4 mt-5 flex gap-3">
-        <div className="flex-1 border border-line rounded-xl px-3 py-2.5">
-          <p className="text-[10px] text-mute">Pay super-fast</p>
-          <p className="text-sm font-medium flex items-center">Try Lite <Chev size={16} /></p>
-        </div>
-        <button onClick={() => nav('/scan')} className="flex-[1.3] bg-plum rounded-xl flex items-center justify-center gap-2 font-medium press">
-          <Scan size={24} className="text-mint" /> Scan &amp; pay
+        {/* 3. Bank transfer */}
+        <button
+          onClick={() => nav('/pay')}
+          className="flex flex-col items-center gap-2 press group"
+        >
+          <span className="w-14 h-14 rounded-2xl bg-[#0b57d0] group-hover:bg-[#1565c0] flex items-center justify-center text-white transition-colors shadow-md">
+            <BankTileIcon size={26} />
+          </span>
+          <span className="text-[11px] font-medium text-center leading-tight text-white/95 px-1">
+            Bank transfer
+          </span>
+        </button>
+
+        {/* 4. Mobile recharge */}
+        <button
+          onClick={() => nav('/pay')}
+          className="flex flex-col items-center gap-2 press group"
+        >
+          <span className="w-14 h-14 rounded-2xl bg-[#0b57d0] group-hover:bg-[#1565c0] flex items-center justify-center text-white transition-colors shadow-md">
+            <MobileRechargeIcon size={26} />
+          </span>
+          <span className="text-[11px] font-medium text-center leading-tight text-white/95 px-1">
+            Mobile recharge
+          </span>
         </button>
       </section>
 
-      <section className="mx-4 mt-3 bg-card rounded-xl flex text-sm overflow-hidden">
-        <button onClick={() => nav('/you')} className="flex items-center gap-2 px-3 py-3 border-r border-line text-mint press"><Scan size={18} /> My QR code <Chev size={16} /></button>
-        <div className="flex-1 flex items-center justify-between px-3 text-mute text-xs">
-          <span>UPI ID: demo@paynest</span><Copy size={16} />
-        </div>
+      {/* Quick Pills Row matching Screenshot 2 */}
+      <section className="relative z-10 px-4 mt-6 flex gap-2.5 overflow-x-auto [scrollbar-width:none]">
+        {/* UPI Lite */}
+        <button
+          onClick={() => nav('/money')}
+          className="shrink-0 bg-[#1e1f24] border border-[#2c2e36] rounded-full px-3.5 py-2 flex items-center gap-2 press hover:bg-[#25272e] transition-colors"
+        >
+          <RocketIcon size={16} />
+          <span className="text-xs text-white">UPI Lite</span>
+          <span className="text-xs text-[#8ab4f8] font-medium">Activate</span>
+        </button>
+
+        {/* Rewards */}
+        <button
+          onClick={() => nav('/you')}
+          className="shrink-0 bg-[#1e1f24] border border-[#2c2e36] rounded-full px-3.5 py-2 flex items-center gap-2 press hover:bg-[#25272e] transition-colors"
+        >
+          <TrophyIcon size={16} />
+          <span className="text-xs text-white">Rewards</span>
+          <span className="text-xs text-[#fbbc04] font-medium">New</span>
+        </button>
+
+        {/* Explore more */}
+        <button
+          onClick={() => nav('/money')}
+          className="shrink-0 bg-[#1e1f24] border border-[#2c2e36] rounded-full px-3.5 py-2 flex items-center gap-2 press hover:bg-[#25272e] transition-colors"
+        >
+          <span className="text-xs text-white">Cards &amp; Loans</span>
+          <Chev size={14} className="text-[#9aa0a6]" />
+        </button>
       </section>
 
-      <section className="mt-7">
-        <h2 className="px-4 text-base font-semibold">Send money</h2>
-        <div className="flex gap-4 overflow-x-auto px-4 mt-3 pb-1 [scrollbar-width:none]">
-          {contacts.map((c) => (
-            <button key={c} onClick={() => toContact(c)} className="flex flex-col items-center gap-1.5 shrink-0 press">
-              <span className="w-14 h-14 rounded-full bg-card2 flex items-center justify-center font-medium text-mint">{initials(c)}</span>
-              <span className="text-[11px] text-white/80">{c.split(' ')[0]}</span>
+      {/* Send Money Contacts Grid matching Screenshot 2 */}
+      <section className="relative z-10 px-4 mt-8">
+        <h2 className="text-lg font-semibold tracking-tight text-white">Send money</h2>
+        
+        <div className="grid grid-cols-4 gap-y-5 gap-x-2 mt-4">
+          {CONTACTS.map((c) => (
+            <button
+              key={c.name}
+              onClick={() => toContact(c)}
+              className="flex flex-col items-center gap-1.5 press group"
+            >
+              <span
+                style={{ backgroundColor: c.color }}
+                className="w-14 h-14 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-sm group-hover:scale-105 transition-transform"
+              >
+                {c.initial}
+              </span>
+              <span className="text-[11px] text-[#e3e3e3] text-center truncate w-full px-0.5 leading-tight">
+                {c.name}
+              </span>
             </button>
           ))}
+
+          {/* More Button */}
+          <button
+            onClick={() => setShowAllContacts(!showAllContacts)}
+            className="flex flex-col items-center gap-1.5 press group"
+          >
+            <span className="w-14 h-14 rounded-full bg-[#1e1f24] border border-[#2c2e36] flex items-center justify-center text-[#9aa0a6] group-hover:text-white transition-colors">
+              <Chev size={20} className={showAllContacts ? 'rotate-180 transition-transform' : 'transition-transform'} />
+            </span>
+            <span className="text-[11px] text-[#9aa0a6] text-center font-medium">
+              {showAllContacts ? 'Less' : 'More'}
+            </span>
+          </button>
         </div>
+
+        {/* Expanded contacts if "More" is clicked */}
+        {showAllContacts && (
+          <div className="grid grid-cols-4 gap-y-5 gap-x-2 mt-4 animate-in fade-in duration-200">
+            {[
+              { name: 'Karthik', initial: 'K', color: '#00897b', upiId: 'karthik@okaxis' },
+              { name: 'Ananya', initial: 'A', color: '#e53935', upiId: 'ananya@okicici' },
+              { name: 'Pradeep', initial: 'P', color: '#3949ab', upiId: 'pradeep@okhdfcbank' },
+              { name: 'Divya', initial: 'D', color: '#8e24aa', upiId: 'divya@oksbi' }
+            ].map((c) => (
+              <button
+                key={c.name}
+                onClick={() => toContact(c)}
+                className="flex flex-col items-center gap-1.5 press group"
+              >
+                <span
+                  style={{ backgroundColor: c.color }}
+                  className="w-14 h-14 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-sm"
+                >
+                  {c.initial}
+                </span>
+                <span className="text-[11px] text-[#e3e3e3] text-center truncate w-full px-0.5 leading-tight">
+                  {c.name}
+                </span>
+              </button>
+            ))}
+          </div>
+        )}
       </section>
 
-      <section className="mt-7">
-        <h2 className="px-4 text-base font-semibold flex items-center gap-2">Next for you <span className="text-[10px] bg-mint text-black rounded-full px-2 py-0.5">New</span></h2>
-        <div className="flex gap-3 overflow-x-auto px-4 mt-3 [scrollbar-width:none]">
-          {cards.map((c) => (
-            <div key={c.t} className="shrink-0 w-64 bg-card rounded-2xl p-4 border border-line">
-              <p className="font-medium">{c.t}</p><p className="text-xs text-mute mt-1">{c.s}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <button onClick={() => nav('/scan')} aria-label="Scan QR"
-        className="fixed right-4 bottom-24 z-10 bg-mint text-black rounded-full px-5 py-3.5 flex items-center gap-2 font-semibold shadow-lg shadow-black/50 press"
-        style={{ marginRight: 'max(0px, calc((100vw - 480px) / 2))' }}>
-        <Scan size={22} /> Scan QR
-      </button>
+      {/* Floating Pill "Scan QR" button matching Screenshot 2 */}
+      <div className="fixed bottom-20 left-1/2 -translate-x-1/2 z-20 pointer-events-auto">
+        <button
+          onClick={() => nav('/scan')}
+          className="bg-[#0b57d0] hover:bg-[#1565c0] text-white px-5 py-3 rounded-full flex items-center gap-2.5 font-medium text-sm shadow-xl shadow-black/60 press transition-all"
+        >
+          <Scan size={18} />
+          <span>Scan QR</span>
+        </button>
+      </div>
     </div>
   )
 }
