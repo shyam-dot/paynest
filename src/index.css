@@ -36,3 +36,109 @@ input { user-select: text; }
 }
 @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } .tick { stroke-dashoffset: 0; } }
 
+/* Cash note travel animation */
+@keyframes flyCash1 {
+  0% {
+    opacity: 0;
+    transform: translateY(0) scale(0.6) rotate(-8deg);
+  }
+  15% {
+    opacity: 1;
+    transform: translateY(30px) scale(1) rotate(-4deg);
+  }
+  85% {
+    opacity: 1;
+    transform: translateY(170px) scale(0.95) rotate(6deg);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(210px) scale(0.5) rotate(12deg);
+  }
+}
+
+@keyframes flyCash2 {
+  0% {
+    opacity: 0;
+    transform: translateY(0) scale(0.6) rotate(6deg);
+  }
+  15% {
+    opacity: 1;
+    transform: translateY(30px) scale(1) rotate(2deg);
+  }
+  85% {
+    opacity: 1;
+    transform: translateY(170px) scale(0.95) rotate(-5deg);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(210px) scale(0.5) rotate(-10deg);
+  }
+}
+
+@keyframes flyCash3 {
+  0% {
+    opacity: 0;
+    transform: translateY(0) scale(0.6) rotate(0deg);
+  }
+  15% {
+    opacity: 1;
+    transform: translateY(30px) scale(1.05) rotate(-2deg);
+  }
+  85% {
+    opacity: 1;
+    transform: translateY(170px) scale(0.95) rotate(3deg);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(210px) scale(0.5) rotate(6deg);
+  }
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(42, 224, 131, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 18px rgba(42, 224, 131, 0);
+  }
+}
+
+@keyframes coinFloat {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) scale(0.5) rotate(0deg);
+  }
+  20% {
+    opacity: 1;
+    transform: translate(-18px, 45px) scale(1.1) rotate(90deg);
+  }
+  80% {
+    opacity: 1;
+    transform: translate(18px, 160px) scale(0.9) rotate(270deg);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(0, 210px) scale(0.4) rotate(360deg);
+  }
+}
+
+.animate-cash-1 {
+  animation: flyCash1 1.4s ease-in-out infinite;
+}
+.animate-cash-2 {
+  animation: flyCash2 1.4s ease-in-out infinite 0.45s;
+}
+.animate-cash-3 {
+  animation: flyCash3 1.4s ease-in-out infinite 0.9s;
+}
+.animate-coin-1 {
+  animation: coinFloat 1.2s ease-in-out infinite 0.2s;
+}
+.animate-coin-2 {
+  animation: coinFloat 1.2s ease-in-out infinite 0.7s;
+}
+.animate-receiver-pulse {
+  animation: pulseGlow 1.2s infinite;
+}
+
+
