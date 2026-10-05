@@ -111,7 +111,7 @@ export default function Pay() {
             maxLength={50}
             className="mt-6 bg-card border border-line rounded-full px-5 py-2.5 text-sm text-center outline-none focus:border-mint transition-colors w-64"
           />
-          <p className="text-[11px] text-mute mt-4">Pure front-end demo · instant simulation</p>
+
         </div>
       </div>
 

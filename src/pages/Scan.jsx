@@ -219,9 +219,9 @@ export default function Scan() {
       )}
 
       {/* Footer */}
-      <footer className="absolute bottom-4 inset-x-0 text-center text-[11px] text-white/60 safe-bottom z-20">
-        Demo mode · Real-time QR recognition
-      </footer>
+        <footer className="absolute bottom-4 inset-x-0 text-center text-[11px] text-white/60 safe-bottom z-20">
+          Align QR code in the frame to pay instantly
+        </footer>
     </div>
   )
 }

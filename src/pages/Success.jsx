@@ -47,7 +47,7 @@ export default function Success() {
             ))}
           </div>
         </div>
-        <p className="text-[11px] text-mute text-center mt-4">Demo payment · reference {receipt.transactionReference}</p>
+
       </div>
 
       <div className="px-4 pb-4 safe-bottom">
